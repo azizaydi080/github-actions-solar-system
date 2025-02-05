@@ -91,7 +91,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
           context: .  # Path to the Docker build context (usually the root of the repo) # Optional: Build for multiple architectures
-          push: false  # Push the image to the registry
+          push: push  # Push the image to the registry
           tags: ${{ vars.DOCKER_HUB_USERNAME}}/solar-system:${{ github.sha}}
     - name: Run Docker Container
       run: |
