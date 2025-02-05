@@ -118,7 +118,8 @@ jobs:
     - name: Test Image URL using wget
       run: |
             wget -q -O - http://127.0.0.1:3000/live | grep live
-    - name: Build and Push Docker Image to ghcr and docker hub        uses: docker/build-push-action@v5
+    - name: Build and Push Docker Image to ghcr and docker hub       
+      uses: docker/build-push-action@v5
       with:
          context: .   
          push: true
