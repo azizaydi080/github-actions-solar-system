@@ -27,3 +27,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+      - name: Archive Test Result
+        if: always()      #added
+        uses: actions/upload-artifact@v4
+        with:
+            name: Mocha-Test-Result
+            path: test-results.xml
