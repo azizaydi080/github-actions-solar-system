@@ -167,6 +167,7 @@ jobs:
         with: 
           method: kubeconfig
           kubeconfig: $${{secrets.KUBECONFIG}}
+
           
       - name: Fetch kubernetes details
         run: |
