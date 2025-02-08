@@ -150,27 +150,28 @@ jobs:
          tags: |
           ${{vars.DOCKER_HUB_USERNAME}}/solar-system:${{ github.sha}}
           ghcr.io/${{github.repository_owner}}/solar-system:${{github.sha}}
-  dev-deploy: 
+  dev-deploy:
     needs: docker
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name : Install azuure cli 
-        uses: azure/setup-kubectl@v3 
-        with : 
-          version: 'v1.26.0'
-     
-      - name: set kubseconfig
-        uses: azure/k8s-set-context@v3
-        with: 
-          method: kubeconfig
-          kubeconfig: $${{secrets.KUBECONFIG}}
 
-          
-      - name: Fetch kubernetes details
+      - name: Set up Kind (Kubernetes IN Docker)
         run: |
-          kubectl version --short 
-          echo --------------------------
-          kubectl get nodes 
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+          kind create cluster --name solar-system
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/kubectl
+
+      - name: Fetch Kubernetes details
+        run: |
+          kubectl version --short
+          echo "--------------------------"
+          kubectl get nodes
